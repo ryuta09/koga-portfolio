@@ -4,11 +4,11 @@
 
 ### 1.1 目的
 フロントエンドエンジニア Ryuta Koga のポートフォリオサイトを刷新する。
-現行サイトの「AIチックな汎用デザイン」を脱し、シンプルかつUXに配慮したダーク系テーマで個性を表現する。
+現行サイトの「AIチックな汎用デザイン」を脱し、記事が主役のシンプルなダーク系サイトを構築する。
 
 ### 1.2 公開先
 - ホスティング：Vercel
-- リポジトリ：GitHub（ryuta09）
+- リポジトリ：GitHub（ryuta09 / koga-portfolio）
 
 ### 1.3 参考サイト
 - https://kano.codes/（デザイン・情報設計の参考）
@@ -33,208 +33,181 @@
 
 ### 3.1 カラーパレット
 
-| トークン | 値 | 用途 |
-|---------|-----|------|
-| `--color-bg` | `#0a0f1e` | ページ背景 |
-| `--color-surface` | `#0f1629` | カード・セクション背景 |
-| `--color-border` | `#1e2d4a` | ボーダー・区切り線 |
-| `--color-text-primary` | `#e8edf5` | 本文・見出し |
-| `--color-text-muted` | `#6b7fa3` | サブテキスト・日付 |
-| `--color-accent` | `#00d4ff` | アクセント（シアン） |
-| `--color-accent-dim` | `rgba(0, 212, 255, 0.1)` | アクセントの薄い背景 |
+`tailwind.config.ts` の `theme.extend.colors` に定義。CSS カスタムプロパティではなく Tailwind クラスで使用する。
+
+| トークン名 | 値 | Tailwind クラス例 | 用途 |
+|-----------|-----|-----------------|------|
+| `bg` | `#0a0f1e` | `bg-bg` | ページ背景 |
+| `surface` | `#0f1629` | `bg-surface` | カード背景 |
+| `border` | `#1e2d4a` | `border-border` | ボーダー・区切り線 |
+| `primary` | `#e8edf5` | `text-primary` | 本文・見出し |
+| `muted` | `#6b7fa3` | `text-muted` | サブテキスト・日付 |
+| `accent` | `#00d4ff` | `text-accent` / `bg-accent` | アクセント（シアン） |
+| — | — | `bg-accent/10` | アクセントの薄い背景 |
 
 ### 3.2 タイポグラフィ
 
 | 用途 | フォント |
 |------|---------|
-| 英数字・見出し | `Geist`（Google Fonts） |
-| 日本語 | `Noto Sans JP`（Google Fonts） |
-
-- 見出しは大きすぎない（`2rem`〜`2.5rem` を上限の目安とする）
-- 行間・文字間隔を意識した読みやすい設定
+| 英数字・見出し | `Geist`（next/font） |
+| 日本語 | `Noto Sans JP`（next/font） |
 
 ### 3.3 アニメーション
 - シンプルなフェードイン（スクロール連動）のみ
 - Framer Motion は使用しない
-- CSS transition / `@keyframes` で実装
+- Tailwind の `transition` / `opacity` / `translate` クラス + `IntersectionObserver` で実装
+- `globals.css` に CSS を書かない。`@keyframes` は不要（Tailwind のユーティリティクラスで代替）
 
 ### 3.4 デザイン原則
-- AIチックな汎用デザイン（shadcn/ui デフォルトそのまま）にしない
-- セクションごとにメリハリをつける
-- 余白を十分に取る
+- shadcn/ui のデフォルト配色をそのまま使わない
+- Hero セクションは設けない（Header に名前・肩書きを入れる程度）
+- 記事一覧がメインコンテンツ
+- 余白を十分に取り、セクションにメリハリをつける
 - モバイルファーストのレスポンシブ対応
 
 ---
 
-## 4. ページ構成
+## 4. サイト構成
 
 ### 4.1 サイトマップ
 
 ```
-/           トップページ
-/profile    プロフィール・経歴ページ
-/works      制作物一覧ページ
-/blog       ブログ記事一覧ページ
+/        トップページ（Zenn記事一覧のみ）
+/about   プロフィール・CONTACT ページ
+/works   制作物一覧（将来実装）
 ```
 
-### 4.2 共通レイアウト
+### 4.2 ナビゲーション
 
 **ヘッダー**
-- ロゴ（`Ryuta Koga` テキスト）
-- ナビゲーション：`Works` / `Profile` / `Blog`
-- スクロール時に背景をぼかす（backdrop-filter）
+- 左：サイト名（`Ryuta Koga`）
+- 右：`Blog`（`/`）/ `Works`（`/works`）/ `About`（`/about`）
+- `Blog` はトップページ（`/`）にいるときアクティブ状態
+- `Works` は将来実装。現時点ではリンクのみ設置（ページは未作成）
+- スクロール時に `backdrop-filter: blur` で背景をぼかす
 
 **フッター**
 - コピーライト
-- SNSリンク：X（Twitter）/ GitHub / Zenn
+- SNSリンク：X（@gdk0918）/ GitHub（ryuta09）/ Zenn（ryuta09）
 
 ---
 
-## 5. 各ページ仕様
+## 5. トップページ（/）詳細仕様
 
-### 5.1 トップページ（/）
+トップページは Zenn 記事一覧のみで構成する。Hero・About・Contact セクションは設けない。
+About・Contact は `/about` ページに集約する。
 
-#### Hero セクション
-- キャッチコピー（日本語）：「小売営業からエンジニアへ。UIで価値を届ける。」
-- サブテキスト：職種名（Frontend Engineer）と簡単な一言紹介
-- SNSリンクアイコン：X / GitHub / Zenn
-- 過度に大きい文字・派手なアニメーションは使わない
+### 5.1 記事一覧セクション
 
-#### Skills セクション
-- 使用技術をタグ形式で表示
-- カテゴリ別グループ（Frontend / Backend / Tool）
-- 技術一覧：
-  - Frontend：HTML / CSS / SCSS（FLOCSS） / JavaScript / TypeScript / React / Next.js
-  - Backend：PHP / Laravel / WordPress / Liquid（Shopify/ecforce）
-  - Tool：Git / GitHub / Figma / Vercel
+#### 概要
+Zenn API から取得した記事を1カラム・縦積みで表示する。
+フィルタータブは設けない（記事のみ表示）。
 
-#### Works セクション
-- 見出し：`Works`
-- 「現在制作物を準備中です」というメッセージを表示
-- `/works` へのリンクを設置
+#### カードレイアウト（1カラム・縦積み）
 
-#### Blog セクション
-- 見出し：`Blog`
-- Zenn API（`https://zenn.dev/api/articles?username=ryuta09&order=latest`）から最新3件取得
-- 表示項目：記事タイトル / 投稿日 / 絵文字アイコン
-- `/blog` へのリンク（「もっと見る」）
-
----
-
-### 5.2 プロフィールページ（/profile）
-
-#### 自己紹介
-- 名前：Ryuta Koga（古賀 龍太）
-- 職種：Frontend Engineer
-- 経歴サマリ：「小売営業7年 → Webメディア運営会社 → システム系自社サービス開発会社（現職）」
-
-#### スキル詳細
-- 技術スタックをカテゴリ別に一覧表示
-
-#### キャリア年表
-- 職歴をタイムライン形式で表示（会社名はダミーまたは非公開でも可）
-
----
-
-### 5.3 制作物一覧ページ（/works）
-
-- 現時点では制作物なし
-- 「現在制作物を準備中です。もうしばらくお待ちください。」と表示
-- 将来的にカード形式で追加できる設計にしておく（型定義・データ構造のみ用意）
-
-**Works カードのデータ構造（将来用）**
-```typescript
-type Work = {
-  id: string
-  title: string
-  description: string
-  techStack: string[]
-  imageUrl?: string
-  siteUrl?: string
-  githubUrl?: string
-  category: 'web' | 'app' | 'other'
-}
+```
+┌──────────────────────────────────────────────┐
+│ [サムネイル画像]  [タイトル]               ＞ │
+│                  [日付]                       │
+└──────────────────────────────────────────────┘
 ```
 
----
+- サムネイル：左側に固定サイズ（w-50 h-30 程度）で表示
+- タイトル：`text-primary`、`text-xl`
+- 日付：タイトルの下、`text-muted`・小さめ
+- 右端に `＞` アイコン
+- カード背景：`bg-surface`、ホバー時にボーダーを強調
 
-### 5.4 ブログ一覧ページ（/blog）
+#### サムネイル画像
+全記事共通で `/public/images/zenn-thumbnail.png` を使用する。
 
-- Zenn API から全記事取得（ページネーションなしで最新20件）
-- 表示項目：記事タイトル / 投稿日 / 絵文字アイコン
-- 記事クリックで Zenn の記事ページに遷移（別タブ）
-
----
-
-## 6. 外部API仕様
-
-### Zenn API
+#### Zenn API
 - エンドポイント：`https://zenn.dev/api/articles?username=ryuta09&order=latest`
-- 取得タイミング：ビルド時（SSG）
-- キャッシュ：`revalidate: 3600`（1時間）
-- エラー時：フォールバック表示（「記事を取得できませんでした」）
+- 取得タイミング：SSG（`revalidate: 3600`）
+- 表示件数：最新20件
+- エラー時：「記事を取得できませんでした」フォールバック表示
+- 記事 URL：`https://zenn.dev` + `article.path`
 
 ---
 
-## 7. 非機能要件
+## 6. ABOUTページ（/about）
+
+About・Contact を集約した単一ページ。
+
+- 名前・肩書き・アイコン画像（任意）
+- 自己紹介文
+- 経歴サマリ（会社名は非公開でも可）
+- スキル詳細（カテゴリ別タグ）
+- Contact：SNSリンク（X / GitHub / Zenn）・メールアドレス（任意）
+
+---
+
+## 7. WORKSページ（/works）※将来実装
+
+- 制作物を一覧表示する
+- 将来的にヘッドレスCMSで管理予定
+- 現時点ではページ未作成。ヘッダーナビの `Works` リンクは設置するが遷移先はなし（または準備中ページ）
+
+---
+
+## 8. 非機能要件
 
 ### パフォーマンス
-- Core Web Vitals（LCP / CLS / INP）を意識した実装
-- 画像は `next/image` を使用
-- フォントは `next/font` で最適化
+- `next/image` で画像最適化
+- `next/font` でフォント最適化
+
+### SEO
+- 各ページに `<title>` / `<meta description>`
+- OGP（`og:title` / `og:description` / `og:image`）
+- `robots.txt` / `sitemap.xml`
 
 ### アクセシビリティ
 - セマンティックな HTML 構造
-- alt 属性の適切な設定
+- `alt` 属性の適切な設定
 - キーボード操作対応
 
-### SEO
-- 各ページに適切な `<title>` / `<meta description>`
-- OGP 設定（`og:title` / `og:description` / `og:image`）
-- `robots.txt` / `sitemap.xml` の生成
-
 ### セキュリティ
-- 環境変数を `.env.local` で管理
-- 外部リンクには `rel="noopener noreferrer"` を付与
-- `.gitignore` に `.env.local` を含める
+- 外部リンクに `rel="noopener noreferrer"` を付与
+- `.env.local` を `.gitignore` に含める
+- `.env.local.example` を作成する
 
 ---
 
-## 8. ディレクトリ構成（想定）
+## 9. ディレクトリ構成（想定）
 
 ```
-src/
-├── app/
-│   ├── layout.tsx        # ルートレイアウト
-│   ├── page.tsx          # トップページ
-│   ├── profile/
-│   │   └── page.tsx
-│   ├── works/
-│   │   └── page.tsx
-│   └── blog/
-│       └── page.tsx
-├── components/
-│   ├── layout/
-│   │   ├── Header.tsx
-│   │   └── Footer.tsx
-│   ├── sections/
-│   │   ├── Hero.tsx
-│   │   ├── Skills.tsx
-│   │   ├── Works.tsx
-│   │   └── Blog.tsx
-│   └── ui/              # shadcn/ui + カスタムコンポーネント
-├── lib/
-│   └── zenn.ts          # Zenn API クライアント
-├── types/
-│   └── index.ts         # 型定義
-└── styles/
-    └── globals.css      # CSS変数・グローバルスタイル
+app/
+├── layout.tsx
+├── page.tsx           # トップページ（Zenn記事一覧）
+├── about/
+│   └── page.tsx
+└── works/
+    └── page.tsx       # 将来実装
+components/
+├── layout/
+│   ├── Header.tsx
+│   └── Footer.tsx
+├── sections/
+│   ├── ArticleList.tsx  # Zenn記事一覧
+│   ├── About.tsx
+│   └── Contact.tsx
+├── ui/
+│   └── ContentCard.tsx  # 記事カードコンポーネント
+└── ...
+lib/
+└── zenn.ts
+types/
+└── index.ts
+public/
+└── images/
+    ├── zenn-thumbnail.png
+    └── works/           # 将来の制作物画像
 ```
 
 ---
 
-## 9. 将来的な拡張予定
+## 10. 将来的な拡張予定
 
-- Works セクションへの制作物追加
-- Tech Blog（Next.js製）への移行検討
+- `/works` ページの実装（ヘッドレスCMSと連携）
 - OGP画像の自動生成（`@vercel/og`）
+- Tech Blog（Next.js製）への移行検討

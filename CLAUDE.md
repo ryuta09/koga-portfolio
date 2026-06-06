@@ -23,30 +23,32 @@ Ryuta Koga のポートフォリオサイトを Next.js 15（App Router）で構
 - `console.log` をコミットに含めない
 
 ### ディレクトリ構成
-`requirements.md` のセクション8に従うこと。
+`requirements.md` のセクション9に従うこと。
 
 ---
 
 ## 実装フェーズ
 
-### Phase 1：基盤構築
-1. `globals.css` に CSS 変数（カラーパレット・フォント）を定義する
+### Phase 1：基盤構築 ✅
+1. `tailwind.config.ts` にカラーパレット・フォントを定義する（`globals.css` には書かない）
 2. `next/font` で `Geist`（英数字）と `Noto Sans JP`（日本語）を設定する
 3. `Header` / `Footer` コンポーネントを実装する
 4. ルートレイアウト（`app/layout.tsx`）を完成させる
 
-### Phase 2：トップページ
-1. `Hero` セクション
-2. `Skills` セクション
-3. `Works` セクション（準備中メッセージ）
-4. `Blog` セクション（Zenn API 連携）
+### Phase 2：トップページ（`/`）
+- Zenn API から記事を取得し、`ContentCard` で1カラム縦積み表示
+- **About・Contact セクションは設けない**（記事一覧のみ）
+- フィルタータブは**設けない**（記事のみ）
 
-### Phase 3：各ページ
-1. `/profile` ページ
-2. `/works` ページ
-3. `/blog` ページ
+### Phase 3：`/about` ページ
+- 自己紹介文・経歴サマリ・スキル詳細
+- Contact（SNSリンク・メールアドレス）を同ページに集約
 
-### Phase 4：仕上げ
+### Phase 4：`/works` ページ ※将来実装
+- 現時点ではヘッダーナビにリンクのみ設置
+- ページ本体は将来のヘッドレスCMS連携時に実装
+
+### Phase 5：仕上げ
 1. SEO（メタデータ・OGP）
 2. `robots.txt` / `sitemap.xml`
 3. レスポンシブ確認（モバイル・タブレット・PC）
@@ -54,19 +56,17 @@ Ryuta Koga のポートフォリオサイトを Next.js 15（App Router）で構
 
 ---
 
-## デザイントークン（必ず使用すること）
+## デザイントークン（`tailwind.config.ts` に定義・必ず Tailwind クラスで使用すること）
 
-```css
-:root {
-  --color-bg: #0a0f1e;
-  --color-surface: #0f1629;
-  --color-border: #1e2d4a;
-  --color-text-primary: #e8edf5;
-  --color-text-muted: #6b7fa3;
-  --color-accent: #00d4ff;
-  --color-accent-dim: rgba(0, 212, 255, 0.1);
-}
-```
+| トークン名 | 値 | Tailwind クラス例 |
+|-----------|-----|-----------------|
+| `bg` | `#0a0f1e` | `bg-bg` |
+| `surface` | `#0f1629` | `bg-surface` |
+| `border` | `#1e2d4a` | `border-border` |
+| `primary` | `#e8edf5` | `text-primary` |
+| `muted` | `#6b7fa3` | `text-muted` |
+| `accent` | `#00d4ff` | `text-accent` / `bg-accent` |
+| accent 10% | — | `bg-accent/10` |
 
 ---
 
@@ -87,6 +87,17 @@ export async function getZennArticles() {
 - エラー時はフォールバック（空配列）を返し、UI側で「記事を取得できませんでした」と表示する
 - 記事URLは `https://zenn.dev` + `article.path` で構成する
 
+---
+
+## ナビゲーション仕様
+
+| ラベル | リンク先 | 備考 |
+|--------|---------|------|
+| `Blog` | `/` | トップページ。`/` にいるときアクティブ状態 |
+| `Works` | `/works` | 将来実装。現時点ではリンクのみ |
+| `About` | `/about` | プロフィール詳細ページ |
+
+---
 
 ## セキュリティ・環境変数
 
@@ -99,12 +110,14 @@ export async function getZennArticles() {
 ## やってはいけないこと（禁止事項）
 
 - `any` 型の使用
-- インラインスタイル（`style={}` 属性）の多用（CSS変数・Tailwindを使う）
+- インラインスタイル（`style={}` 属性）の多用（Tailwind クラスを使う）
+- `globals.css` にカスタム CSS を書く（`@import "tailwindcss"` と `@config` の2行のみ許容）
 - shadcn/ui のデフォルト配色（青紫系グラデーション）をそのまま使う
 - Hero の見出しを `4rem` 以上にする
 - `console.log` をコードに残す
 - `.env.local` をコミットする
 - `requirements.md` に定義されていない外部ライブラリを無断で追加する（追加する場合は理由をコメントする）
+- トップページにフィルタータブを実装する（記事と制作物の混在はしない）
 
 ---
 
@@ -117,7 +130,7 @@ export async function getZennArticles() {
 - [ ] モバイル（375px）/ タブレット（768px）/ PC（1280px）で表示崩れがない
 - [ ] Zenn API からの記事取得が動作する（または適切なフォールバックが表示される）
 - [ ] 外部リンクに `rel="noopener noreferrer"` が付いている
-- [ ] `requirements.md` のカラーパレットが CSS変数として定義されている
+- [ ] `tailwind.config.ts` にカラーパレットが定義されており、Tailwind クラスとして使用できる
 
 ---
 
