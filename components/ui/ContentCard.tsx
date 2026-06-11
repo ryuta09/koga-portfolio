@@ -20,7 +20,7 @@ export function ContentCard({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-4 rounded-lg border border-border bg-surface p-4 transition-colors hover:border-accent/30"
+      className="group flex items-center gap-4 rounded-lg border-2 border-border bg-surface p-4 transition-colors hover:border-accent/50"
     >
       {/* サムネイル */}
       <div className="relative h-30 w-50 shrink-0 overflow-hidden rounded-md bg-border">
