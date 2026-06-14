@@ -4,15 +4,15 @@ import Link from 'next/link'
 const skills = [
   {
     category: 'Frontend',
-    items: ['TypeScript', 'React', 'Next.js', 'Tailwind CSS', 'HTML / CSS'],
+    items: ['HTML', 'CSS(Scss)', 'JavaScript', 'TypeScript', 'React', 'Next.js', 'Tailwind CSS'],
   },
   {
     category: 'Backend',
-    items: ['Node.js', 'Express', 'REST API'],
+    items: ['Node.js', 'Laravel',],
   },
   {
     category: 'Tools & Infra',
-    items: ['Git / GitHub', 'Vercel', 'Figma', 'Docker'],
+    items: ['Git / GitHub', 'Vercel','Docker'],
   },
 ]
 
@@ -44,19 +44,15 @@ export default function AboutPage() {
       <section aria-labelledby="about-heading" className="mb-20">
         <p className="text-xl font-bold text-primary mb-4">About</p>
         <h1 id="about-heading" className="text-3xl font-bold text-primary mb-2">
-          Ryuta Koga
+          古賀龍太
         </h1>
-        <p className="text-base text-muted mb-8">Frontend Engineer</p>
-        <div className="space-y-4 text-base text-primary leading-relaxed">
+        <p className="text-sm text-muted font-medium">Frontend Engineer</p>
+        <div className="flex flex-col gap-2 mt-4 text-base text-primary leading-relaxed">
           <p>
-            フロントエンドエンジニアとして、主に React / Next.js を使ったプロダクト開発に携わっています。
+            販売員として約7年従事したのち、Progateをきっかけにプログラミングの面白さに気づき、Web業界へ転身。
           </p>
           <p>
-            ユーザーが心地よく使えるインターフェースの設計・実装に興味があり、
-            パフォーマンスとアクセシビリティの両立を意識しながら開発しています。
-          </p>
-          <p>
-            技術的なアウトプットは Zenn に投稿しています。
+            コーダーとして静的コーディングやWordPress構築、保守から始め、Next.jsを用いたメディアサイトの開発を経て、現在は受託開発の現場でReactとLaravelを中心にエンジニアとして働いています。
           </p>
         </div>
       </section>
@@ -67,20 +63,26 @@ export default function AboutPage() {
           id="career-heading"
           className="text-xl font-bold text-primary mb-8"
         >
-          Career
+          経歴
         </h2>
         <ol className="relative border-l border-border pl-6 space-y-8 list-none m-0 p-0 pl-6">
           <li>
             <span className="absolute -left-1.5 mt-1.5 h-3 w-3 rounded-full bg-accent" />
-            <p className="text-sm text-muted mb-1">2022 — 現在</p>
-            <p className="text-base font-medium text-primary">フロントエンドエンジニア</p>
-            <p className="text-sm text-muted mt-0.5">Web系企業</p>
+            <p className="text-sm text-muted mb-1">2026年 5月 — 現在</p>
+            <p className="text-lg font-medium text-primary">受託開発</p>
+            <p className="text-sm text-muted mt-0.5 text-white">受託案件に携わって日々開発しています。現在はReactとLaravelを使ったプロジェクトに参画中</p>
           </li>
           <li>
             <span className="absolute -left-1.5 mt-1.5 h-3 w-3 rounded-full bg-border" />
-            <p className="text-sm text-muted mb-1">2020 — 2022</p>
-            <p className="text-base font-medium text-primary">エンジニア</p>
-            <p className="text-sm text-muted mt-0.5">SIer</p>
+            <p className="text-sm text-muted mb-1">2023年4月 — 20264月</p>
+            <p className="text-lg font-medium text-primary">Webメディア運営会社</p>
+            <p className="text-sm text-muted mt-0.5 text-white">コーダーとして静的なコーディングからWordPress構築、保守を担当。Next.jsを採用したメディアサイトの開発にも携わる</p>
+          </li>
+          <li>
+            <span className="absolute -left-1.5 mt-1.5 h-3 w-3 rounded-full bg-border" />
+            <p className="text-sm text-muted mb-1"> — 2023年3月</p>
+            <p className="text-lg font-medium text-primary">販売員時代</p>
+            <p className="text-sm text-muted mt-0.5 text-white">大手通信販売代理店に新卒で入社。携帯電話の販売員として日々お客様に最適なサービスや端末を提案し販売を行う</p>
           </li>
         </ol>
       </section>
@@ -91,7 +93,7 @@ export default function AboutPage() {
           id="skills-heading"
           className="text-xl font-bold text-primary mb-8"
         >
-          Skills
+          スキル
         </h2>
         <div className="flex flex-col gap-8">
           {skills.map((group) => (
@@ -118,7 +120,7 @@ export default function AboutPage() {
           id="contact-heading"
           className="text-xl font-bold text-primary mb-8"
         >
-          Contact
+          お問い合わせ
         </h2>
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 list-none m-0 p-0">
           {snsLinks.map((link) => (
